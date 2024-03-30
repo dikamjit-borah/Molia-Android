@@ -1,4 +1,4 @@
-package com.hobarb.molio
+package com.hobarb.molio.ui.activities
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.hobarb.molio.R
+import com.hobarb.molio.adapters.TitlesAdapter
 import com.hobarb.molio.databinding.ActivityMainBinding
+import com.hobarb.molio.models.TitlesModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,17 +25,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        //setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        /*val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
+*/
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
         }
+        val titles: List<TitlesModel>? = null
+        setupRecyclerView(titles)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,5 +61,13 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    private fun setupRecyclerView(titles: List<TitlesModel>?) {
+        if(!(titles.isNullOrEmpty())) {
+            binding.rvTitles.layoutManager = LinearLayoutManager(this)
+            binding.rvTitles.adapter = titles?.let { TitlesAdapter(it) }
+        }
+        //display textview if no titles found
     }
 }

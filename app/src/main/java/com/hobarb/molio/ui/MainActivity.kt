@@ -1,4 +1,4 @@
-package com.hobarb.molio.ui.activities
+package com.hobarb.molio.ui
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar

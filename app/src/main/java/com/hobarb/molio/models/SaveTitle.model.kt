@@ -4,6 +4,7 @@ import java.io.Serializable
 
 data class SaveTitleModel(
     val user_id: String = "",
-    val entry_type: String = "",
-    val details: String = ""
+    val collection: String = "",
+    val sub_collection: String? = null,
+    val details: TitleModel
 ) : Serializable

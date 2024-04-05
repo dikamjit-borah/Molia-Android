@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hobarb.molio.R
-import com.hobarb.molio.models.TitlesModel
+import com.hobarb.molio.models.TitleModel
 
 
 class TitlesAdapter(
-    private val titlesList: List<TitlesModel>,
+    private val titlesList: List<TitleModel>,
 ) : RecyclerView.Adapter<TitlesAdapter.TitlesViewHolder>() {
 
 

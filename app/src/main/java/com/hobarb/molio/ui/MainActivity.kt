@@ -1,5 +1,6 @@
 package com.hobarb.molio.ui
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hobarb.molio.R
 import com.hobarb.molio.adapters.TitlesAdapter
 import com.hobarb.molio.databinding.ActivityMainBinding
-import com.hobarb.molio.models.TitlesModel
+import com.hobarb.molio.models.TitleModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,8 +36,10 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
+            val intent = Intent(this, SaveActivity::class.java)
+            startActivity(intent)
         }
-        val titles: List<TitlesModel>? = null
+        val titles: List<TitleModel>? = null
         setupRecyclerView(titles)
 
     }
@@ -63,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    private fun setupRecyclerView(titles: List<TitlesModel>?) {
+    private fun setupRecyclerView(titles: List<TitleModel>?) {
         if(!(titles.isNullOrEmpty())) {
             binding.rvTitles.layoutManager = LinearLayoutManager(this)
             binding.rvTitles.adapter = titles?.let { TitlesAdapter(it) }

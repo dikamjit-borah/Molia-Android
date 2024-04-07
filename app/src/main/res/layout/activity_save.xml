@@ -1,39 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.SaveActivity">
+    tools:context=".ui.SaveActivity"
+    android:padding="26dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/lexend"
+            android:text="Submit Movie Details"
+            android:textColor="#E4E5E8"
+            android:textSize="18sp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lexend"
+            android:text="Search for your movie and click continue"
+            android:textColor="#E4E5E8"
+            android:textSize="16sp">
+
+        </TextView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lexend"
+                android:text="Title">
+
+            </TextView>
+
+            <SearchView
+                android:id="@+id/sv_titles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTint="@android:color/white"
+                android:hint="Start Typing"
+                />
+
+        </LinearLayout>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></EditText>
 
         <EditText
-            android:id="@+id/collection_et"
+            android:id="@+id/et_collection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></EditText>
 
         <EditText
-            android:id="@+id/sub_collection_et"
+            android:id="@+id/et_sub_collection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></EditText>
 
         <EditText
-            android:id="@+id/title_et"
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></EditText>
 
         <Button
-            android:id="@+id/submit_btn"
+            android:id="@+id/btn_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Submit">

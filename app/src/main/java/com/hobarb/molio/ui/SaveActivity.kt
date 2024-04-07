@@ -2,23 +2,25 @@ package com.hobarb.molio.ui
 
 import TitleDetails
 import android.os.Bundle
-import android.util.Log
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.gson.JsonElement
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.hobarb.molio.R
+import com.hobarb.molio.adapters.SearchedTitlesAdapter
 import com.hobarb.molio.databinding.ActivitySaveBinding
+import com.hobarb.molio.interfaces.OnItemClickListener
 import com.hobarb.molio.models.dtos.SaveTitleModel
-import com.hobarb.molio.models.schemas.SearchTitle
 import com.hobarb.molio.services.ApiHandler
 import com.hobarb.molio.utils.Constants
-import kotlinx.coroutines.runBlocking
 
-class SaveActivity : AppCompatActivity() {
+class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
     private lateinit var binding: ActivitySaveBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +33,15 @@ class SaveActivity : AppCompatActivity() {
         }
         binding = ActivitySaveBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        svTitlesSetup()
+        setupViews()
+    }
 
+    private fun setupViews(){
+        btnSubmitSetup()
+        svTitlesSetup()
+    }
+
+    private fun btnSubmitSetup(){
         binding.btnSubmit.setOnClickListener {
             try {
                 //Helpers().showLoader()
@@ -46,12 +55,12 @@ class SaveActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleSubmitBtn() {
+    private fun handleSubmitBtn(titleDetails: TitleDetails) {
         ApiHandler().saveTitle(
             body = SaveTitleModel(
                 user_id = Constants.USER_ID,
                 collection = binding.etCollection.text.toString(),
-                details = TitleDetails(Title = binding.etTitle.text.toString())
+                details = titleDetails
             )
         ) { success, message, data ->
             //hideLoader() // Hide loader after API call is completed
@@ -89,12 +98,20 @@ class SaveActivity : AppCompatActivity() {
         })
     }
 
+    private fun rvSearchedTitlesSetup(titles: JsonArray?){
+        binding.rvSearchedTitles.layoutManager = LinearLayoutManager(this)
+        binding.rvSearchedTitles.adapter = titles?.let { SearchedTitlesAdapter(this, it) }
+    }
+
     private fun callSearchApi(s: String) {
             try {
                 ApiHandler().searchTitles(s) { success, message, data ->
                     //hideLoader() // Hide loader after API call is completed
                     if (success) {
-                        Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
+                        if (data != null) {
+                            rvSearchedTitlesSetup(data)
+                        }
+                        //Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
                         // Proceed to next step
                     } else {
                         Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
@@ -106,6 +123,10 @@ class SaveActivity : AppCompatActivity() {
                 exception.printStackTrace()
             }
 
+    }
+    override fun onItemClick(item: JsonObject) {
+        val titleDetails: TitleDetails = Gson().fromJson(item, TitleDetails::class.java)
+        handleSubmitBtn(titleDetails)
     }
 
 

@@ -1,6 +1,7 @@
 package com.hobarb.molio.services
 
 import android.widget.Toast
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.hobarb.molio.models.dtos.SaveTitleModel
 import com.hobarb.molio.models.schemas.SearchTitle
@@ -35,13 +36,13 @@ class ApiHandler {
             }
         })
     }
-    fun searchTitles(s: String, callback: (Boolean, String?, JsonObject?) -> Unit) {
+    fun searchTitles(s: String, callback: (Boolean, String?, JsonArray?) -> Unit) {
         RetrofitClient.omdbApiService.searchTitles("", s).enqueue(object : Callback<JsonObject> {
             override fun onResponse(
                 call: Call<JsonObject>,
                 response: Response<JsonObject>
             ) {
-                callback(true, response.message(), response.body())
+                callback(true, response.message(), response.body()?.getAsJsonArray("Search"))
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {

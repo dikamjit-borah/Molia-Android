@@ -1,21 +1,25 @@
-package com.hobarb.molio.adapters
+package com.hobarb.molia.adapters
 
-import TitleDetails
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.hobarb.molio.R
+import com.google.gson.JsonArray
+import com.hobarb.molia.R
+import com.hobarb.molia.interfaces.OnItemClickListener
 
 
-class TitlesAdapter(
-    private val titlesList: List<TitleDetails>,
-) : RecyclerView.Adapter<TitlesAdapter.TitlesViewHolder>() {
+class SearchedTitlesAdapter<T>(
+    private val listener: OnItemClickListener<T>,
+    private val titlesList: JsonArray,
+) : RecyclerView.Adapter<SearchedTitlesAdapter<T>.TitlesViewHolder>() {
 
 
     inner class TitlesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title_tv: TextView = itemView.findViewById(R.id.title_tv);
+        val llTitle: LinearLayout = itemView.findViewById(R.id.ll_title)
     }
 
 
@@ -30,12 +34,17 @@ class TitlesAdapter(
     }
 
     override fun getItemCount(): Int {
-        return titlesList.size
+        return titlesList.size()
     }
 
     override fun onBindViewHolder(holder: TitlesViewHolder, position: Int) {
         val item = titlesList[position]
-        holder.title_tv.text = "" + titlesList[position].Title
+        holder.title_tv.text = "" + titlesList[position]
+        holder.llTitle.setOnClickListener {
+            listener.onItemClick(item as T)
+            titlesList.removeAll { true }
+            notifyDataSetChanged()
+        }
     }
 }
 

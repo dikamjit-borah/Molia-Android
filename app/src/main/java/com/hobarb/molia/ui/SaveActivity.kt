@@ -1,4 +1,4 @@
-package com.hobarb.molio.ui
+package com.hobarb.molia.ui
 
 import TitleDetails
 import android.os.Bundle
@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.hobarb.molio.R
-import com.hobarb.molio.adapters.SearchedTitlesAdapter
-import com.hobarb.molio.databinding.ActivitySaveBinding
-import com.hobarb.molio.interfaces.OnItemClickListener
-import com.hobarb.molio.models.dtos.SaveTitleModel
-import com.hobarb.molio.services.ApiHandler
-import com.hobarb.molio.utils.Constants
+import com.hobarb.molia.R
+import com.hobarb.molia.adapters.SearchedTitlesAdapter
+import com.hobarb.molia.databinding.ActivitySaveBinding
+import com.hobarb.molia.interfaces.OnItemClickListener
+import com.hobarb.molia.models.dtos.SaveTitleModel
+import com.hobarb.molia.services.ApiHandler
+import com.hobarb.molia.utils.Constants
 
 class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
     private lateinit var binding: ActivitySaveBinding

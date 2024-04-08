@@ -1,4 +1,4 @@
-package com.hobarb.molio.models.schemas
+package com.hobarb.molia.models.schemas
 
 data class SearchTitle(
     val Poster: String,

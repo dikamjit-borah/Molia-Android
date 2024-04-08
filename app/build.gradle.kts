@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hobarb.molio"
+    namespace = "com.hobarb.molia"
     compileSdk = 34
 
     defaultConfig {

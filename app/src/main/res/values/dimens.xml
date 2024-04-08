@@ -1,3 +1,9 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="marginKeys">4dp</dimen>
+    <dimen name="h2">18sp</dimen>
+    <dimen name="h1">30sp</dimen>
+    <dimen name="etPadding">15dp</dimen>
+    <dimen name="parentMargin">15dp</dimen>
+    <dimen name="cornerRadius">5dp</dimen>
 </resources>

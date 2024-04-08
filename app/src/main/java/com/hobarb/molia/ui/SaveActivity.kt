@@ -24,13 +24,13 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
     private lateinit var binding: ActivitySaveBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContentView(R.layout.activity_save)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+       /* ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
+        }*/
         binding = ActivitySaveBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupViews()
@@ -75,7 +75,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
     }
 
     private fun svTitlesSetup() {
-        binding.svTitles.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.svTitle.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     val searchResults =  (query)

@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <!-- todo: collapsible-->
@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Submit Movie Details"
+                    android:text="Add Details"
                     android:textSize="@dimen/h1"
                     android:textStyle="bold">
 
@@ -38,7 +38,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Search for your movie and click continue"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:maxLines="2"
+                    android:text="Search and add details for your favorite movies and tv shows"
                     android:textSize="@dimen/h2">
 
                 </TextView>
@@ -146,7 +149,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -175,7 +178,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -267,7 +270,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -297,7 +300,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 

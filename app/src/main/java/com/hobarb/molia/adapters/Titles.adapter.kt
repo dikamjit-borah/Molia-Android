@@ -15,14 +15,14 @@ class TitlesAdapter(
 
 
     inner class TitlesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title_tv: TextView = itemView.findViewById(R.id.title_tv);
+        val title_tv: TextView = itemView.findViewById(R.id.tvTitle);
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitlesViewHolder {
         return TitlesViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.card_title,
+                R.layout.card_searched_title,
                 parent,
                 false
             )

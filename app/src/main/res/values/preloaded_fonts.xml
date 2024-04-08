@@ -3,5 +3,7 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/big_shoulders_text_light</item>
         <item>@font/big_shoulders_text_semibold</item>
+        <item>@font/hind_vadodara_light</item>
+        <item>@font/lexend</item>
     </array>
 </resources>

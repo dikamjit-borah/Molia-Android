@@ -1,17 +1,16 @@
 package com.hobarb.molio.adapters
 
-import android.content.Intent
+import TitleDetails
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hobarb.molio.R
-import com.hobarb.molio.models.TitleModel
 
 
 class TitlesAdapter(
-    private val titlesList: List<TitleModel>,
+    private val titlesList: List<TitleDetails>,
 ) : RecyclerView.Adapter<TitlesAdapter.TitlesViewHolder>() {
 
 
@@ -36,7 +35,7 @@ class TitlesAdapter(
 
     override fun onBindViewHolder(holder: TitlesViewHolder, position: Int) {
         val item = titlesList[position]
-        holder.title_tv.text = "" + titlesList[position].title
+        holder.title_tv.text = "" + titlesList[position].Title
     }
 }
 

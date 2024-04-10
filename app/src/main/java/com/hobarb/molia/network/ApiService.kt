@@ -16,5 +16,5 @@ interface OmdbApiService {
     fun searchTitles(@Query("apikey") apikey: String, @Query("s") s: String): Call<JsonObject>
 
     @GET("/")
-    fun fetchTitleDetails(@Query("apikey") apikey: String, @Query("i") i: String): Call<JsonObject>
+    fun fetchTitleDetails(@Query("apikey") apikey: String, @Query("i") i: String): Call<TitleDetails>
 }

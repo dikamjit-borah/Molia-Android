@@ -1,5 +1,6 @@
 package com.hobarb.molia.services
 
+import TitleDetails
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonArray
@@ -63,17 +64,17 @@ class ApiHandler {
             })
     }
 
-    fun fetchTitleDetails(i: String, callback: (Boolean, String?, JsonObject?) -> Unit) {
+    fun fetchTitleDetails(i: String, callback: (Boolean, String?, TitleDetails?) -> Unit) {
         RetrofitClient.omdbApiService.fetchTitleDetails("", i)
-            .enqueue(object : Callback<JsonObject> {
+            .enqueue(object : Callback<TitleDetails> {
                 override fun onResponse(
-                    call: Call<JsonObject>,
-                    response: Response<JsonObject>
+                    call: Call<TitleDetails>,
+                    response: Response<TitleDetails>
                 ) {
                     callback(true, response.message(), response.body())
                 }
 
-                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                override fun onFailure(call: Call<TitleDetails>, t: Throwable) {
                     callback(true, t.message, null)
                 }
             })

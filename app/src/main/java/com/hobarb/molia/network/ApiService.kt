@@ -14,4 +14,7 @@ interface MoliaBackendService {
 interface OmdbApiService {
     @GET("/")
     fun searchTitles(@Query("apikey") apikey: String, @Query("s") s: String): Call<JsonObject>
+
+    @GET("/")
+    fun fetchTitleDetails(@Query("apikey") apikey: String, @Query("i") i: String): Call<JsonObject>
 }

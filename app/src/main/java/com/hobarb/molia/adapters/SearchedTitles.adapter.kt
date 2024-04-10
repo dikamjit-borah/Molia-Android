@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.gson.JsonArray
+import com.hobarb.molia.models.schemas.SearchedTitle
 import com.hobarb.molia.R
 import com.hobarb.molia.interfaces.OnItemClickListener
 
@@ -17,7 +17,7 @@ import com.hobarb.molia.interfaces.OnItemClickListener
 class SearchedTitlesAdapter<T>(
     var context: Context,
     private val listener: OnItemClickListener<T>,
-    private val titlesList: JsonArray,
+    private val titlesList: List<SearchedTitle>,
 ) : RecyclerView.Adapter<SearchedTitlesAdapter<T>.TitlesViewHolder>() {
 
 
@@ -41,30 +41,24 @@ class SearchedTitlesAdapter<T>(
     }
 
     override fun getItemCount(): Int {
-        return titlesList.size()
+        return titlesList.size
     }
 
     override fun onBindViewHolder(holder: TitlesViewHolder, position: Int) {
-        val item = titlesList[position].asJsonObject
-        holder.tvTitle.text = item.get("Title").asString
-        holder.tvYear.text = item.get("Year").asString
-        holder.tvType.text = item.get("Type").asString
+        val item = titlesList[position]
+        holder.tvTitle.text = item.Title
+        holder.tvYear.text = item.Year
+        holder.tvType.text = item.Type
         Glide
             .with(context)
-            .load(item.get("Poster").asString)
+            .load(item.Poster)
             .centerCrop()
             .placeholder(R.drawable.ic_loader)
             .into(holder.ivPoster);
 
         holder.llTitle.setOnClickListener {
             listener.onItemClick(item as T)
-            clearData()
         }
-    }
-
-    fun clearData() {
-        titlesList.removeAll { true }
-        notifyDataSetChanged()
     }
 }
 

@@ -17,6 +17,7 @@ import com.hobarb.molia.adapters.SearchedTitlesAdapter
 import com.hobarb.molia.databinding.ActivitySaveBinding
 import com.hobarb.molia.interfaces.OnItemClickListener
 import com.hobarb.molia.models.dtos.SaveTitleModel
+import com.hobarb.molia.models.schemas.SearchedTitle
 import com.hobarb.molia.services.ApiHandler
 import com.hobarb.molia.utils.Constants
 import kotlinx.coroutines.CoroutineScope
@@ -25,18 +26,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
+class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private lateinit var binding: ActivitySaveBinding
-    private lateinit var searchedTitles: JsonArray
+    private var searchedTitles: MutableList<SearchedTitle> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
         setContentView(R.layout.activity_save)
-        /* ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-             insets
-         }*/
         binding = ActivitySaveBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupViews()
@@ -113,9 +109,9 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
         })
     }
 
-    private fun rvSearchedTitlesSetup(titles: JsonArray?) {
+    private fun rvSearchedTitlesSetup(titles: MutableList<SearchedTitle>) {
         binding.rvSearchedTitles.layoutManager = LinearLayoutManager(this)
-        binding.rvSearchedTitles.adapter = titles?.let { SearchedTitlesAdapter(this, this, it) }
+        binding.rvSearchedTitles.adapter = SearchedTitlesAdapter(this, this, titles)
     }
 
     private fun handleSearchEvent(s: String) {
@@ -124,7 +120,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
                 //hideLoader() // Hide loader after API call is completed
                 if (success) {
                     if (data != null) {
-                        searchedTitles = data
+                        searchedTitles = data as MutableList<SearchedTitle>
                         rvSearchedTitlesSetup(searchedTitles)
                     }
                     //Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
@@ -141,10 +137,31 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<JsonObject> {
 
     }
 
-    override fun onItemClick(item: JsonObject) {
-        val titleDetails: TitleDetails = Gson().fromJson(item, TitleDetails::class.java)
-        handleSubmitBtn(titleDetails)
+    fun setupEts(data: JsonObject) {
+
     }
 
+    private fun clearSearchedTitles(){
+        searchedTitles.clear()
+        binding.rvSearchedTitles.adapter?.notifyDataSetChanged()
+    }
+
+    override fun onItemClick(item: SearchedTitle) {
+        clearSearchedTitles()
+        fetchTitleDetails(item)
+    }
+
+    private fun fetchTitleDetails(title: SearchedTitle){
+        ApiHandler().fetchTitleDetails(title.imdbID) { success, message, data ->
+            if (success) {
+                if (data != null) {
+                    Toast.makeText(baseContext, "hahahah" + data, Toast.LENGTH_SHORT).show()
+                    setupEts(data)
+                }
+            } else {
+                Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 }

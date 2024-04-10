@@ -1,6 +1,6 @@
 package com.hobarb.molia.models.schemas
 
-data class SearchTitle(
+data class SearchedTitle(
     val Poster: String,
     val Title: String,
     val Type: String,

@@ -2,7 +2,7 @@ import retrofit2.Response
 
 object ResponseParser {
 
-    fun <T> parseResponse(response: Response<T>): ApiResponse<T> {
+    fun <T> parseResponse(response: Response<T>): ApiResponse<T & Any> {
         return if (response.isSuccessful) {
             val body = response.body()
             if (body != null) {

@@ -4,14 +4,8 @@ import TitleDetails
 import android.os.Bundle
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import com.hobarb.molia.R
 import com.hobarb.molia.adapters.SearchedTitlesAdapter
 import com.hobarb.molia.databinding.ActivitySaveBinding
@@ -29,6 +23,7 @@ import kotlinx.coroutines.launch
 class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private lateinit var binding: ActivitySaveBinding
     private var searchedTitles: MutableList<SearchedTitle> = mutableListOf()
+    private  lateinit var titleDetails: TitleDetails
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,24 +41,51 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private fun btnSubmitSetup() {
         binding.btnSubmit.setOnClickListener {
             try {
-                //Helpers().showLoader()
-                //handleSubmitBtn()
-                //callSearchApi("something")
+               handleSubmitBtn()
 
             } catch (ex: Exception) {
-                //Helpers().hideLoader()
-                print("ssmsm")
+                Toast.makeText(baseContext, "" + ex.message, Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun handleSubmitBtn(titleDetails: TitleDetails) {
-        ApiHandler().saveTitle(
+    fun handleSubmitBtn(){
+        val details = getTitleDetails()
+        submitDetails(details, binding.etCollection.text.toString(), binding.etSubCollection.text.toString())
+    }
+
+    fun getTitleDetails(): TitleDetails {
+        this.titleDetails.Title = binding.svTitle.query.toString()
+        this.titleDetails.Director = binding.etDirector.text.toString()
+        this.titleDetails.Actors = binding.etActors.text.toString()
+        this.titleDetails.Year = binding.etYear.text.toString()
+        this.titleDetails.Language = binding.etLanguage.text.toString()
+        this.titleDetails.imdbRating = binding.etImdbRating.text.toString()
+        return this.titleDetails
+
+    }
+
+    private fun submitDetails(titleDetails: TitleDetails, collection: String, subCollection: String? = null) {
+        var body: SaveTitleModel
+        if (subCollection.isNullOrEmpty()){
             body = SaveTitleModel(
                 user_id = Constants.USER_ID,
-                collection = binding.etCollection.text.toString(),
+                collection = collection,
                 details = titleDetails
             )
+        }
+        else{
+            body = SaveTitleModel(
+                user_id = Constants.USER_ID,
+                collection = collection,
+                sub_collection = subCollection,
+                details = titleDetails
+            )
+
+        }
+
+        ApiHandler().saveTitle(
+            body = body
         ) { success, message, data ->
             //hideLoader() // Hide loader after API call is completed
             if (success) {
@@ -137,11 +159,16 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
 
     }
 
-    fun setupEts(data: JsonObject) {
-
+    fun setupEts(title: TitleDetails) {
+        binding.svTitle.setQuery(title.Title, false)
+        binding.etDirector.setText(title.Director)
+        binding.etActors.setText(title.Actors)
+        binding.etYear.setText(title.Year)
+        binding.etLanguage.setText(title.Language)
+        binding.etImdbRating.setText(title.imdbRating)
     }
 
-    private fun clearSearchedTitles(){
+    private fun clearSearchedTitles() {
         searchedTitles.clear()
         binding.rvSearchedTitles.adapter?.notifyDataSetChanged()
     }
@@ -151,17 +178,23 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
         fetchTitleDetails(item)
     }
 
-    private fun fetchTitleDetails(title: SearchedTitle){
+    private fun fetchTitleDetails(title: SearchedTitle) {
         ApiHandler().fetchTitleDetails(title.imdbID) { success, message, data ->
             if (success) {
                 if (data != null) {
                     Toast.makeText(baseContext, "hahahah" + data, Toast.LENGTH_SHORT).show()
-                    setupEts(data)
+                    handleTitleFetchedEvent(data)
                 }
             } else {
                 Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun handleTitleFetchedEvent(titleDetails: TitleDetails){
+        this.titleDetails = titleDetails
+        setupEts(titleDetails)
+
     }
 
 }

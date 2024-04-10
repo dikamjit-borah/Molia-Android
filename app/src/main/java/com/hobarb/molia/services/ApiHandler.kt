@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.hobarb.molia.BuildConfig
 import com.hobarb.molia.models.dtos.SaveTitleModel
 import com.hobarb.molia.models.schemas.SearchedTitle
 import com.hobarb.molia.network.RetrofitClient
@@ -44,7 +45,7 @@ class ApiHandler {
     }
 
     fun searchTitles(s: String, callback: (Boolean, String?, List<SearchedTitle>?) -> Unit) {
-        RetrofitClient.omdbApiService.searchTitles("", s)
+        RetrofitClient.omdbApiService.searchTitles(BuildConfig.OMDB_API_KEY, s)
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
@@ -65,7 +66,7 @@ class ApiHandler {
     }
 
     fun fetchTitleDetails(i: String, callback: (Boolean, String?, TitleDetails?) -> Unit) {
-        RetrofitClient.omdbApiService.fetchTitleDetails("", i)
+        RetrofitClient.omdbApiService.fetchTitleDetails(BuildConfig.OMDB_API_KEY, i)
             .enqueue(object : Callback<TitleDetails> {
                 override fun onResponse(
                     call: Call<TitleDetails>,

@@ -18,6 +18,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "OMDB_API_KEY", "\"${project.properties.get("OMDB_API_KEY")}\"")
     }
 
     buildTypes {
@@ -39,6 +40,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

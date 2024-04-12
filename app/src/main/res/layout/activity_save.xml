@@ -11,6 +11,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/btnSubmit"
         android:layout_margin="@dimen/parentMargin">
 
         <LinearLayout
@@ -94,7 +96,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_searchedTitles"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    >
 
                 </androidx.recyclerview.widget.RecyclerView>
 

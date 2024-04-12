@@ -25,15 +25,31 @@
                 android:layout_marginBottom="15dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Add Details"
-                    android:textSize="@dimen/h1"
-                    android:textStyle="bold">
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Save "
+                        android:textSize="@dimen/h1"
+                        android:textStyle="bold">
 
-                </TextView>
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Title"
+                        android:textSize="@dimen/h1"
+                        android:textStyle="bold"
+                        android:textColor="@color/secondaryAccent">
+
+                    </TextView>
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -64,7 +80,7 @@
 
                 </TextView>
 
-                <SearchView
+                <androidx.appcompat.widget.SearchView
                     android:id="@+id/svTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,7 +88,7 @@
                     android:backgroundTint="@color/primaryAccent"
                     android:drawableTint="@android:color/white"
                     android:hint="Start Typing"
-                    android:typeface = "@font/lexend"
+                    style="@style/SearchViewStyle"
                     />
 
                 <androidx.recyclerview.widget.RecyclerView

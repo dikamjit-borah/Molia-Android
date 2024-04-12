@@ -1,21 +1,16 @@
 package com.hobarb.molia.services
 
 import TitleDetails
-import android.widget.Toast
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.hobarb.molia.BuildConfig
 import com.hobarb.molia.models.dtos.SaveTitleModel
 import com.hobarb.molia.models.schemas.SearchedTitle
 import com.hobarb.molia.network.RetrofitClient
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.await
-import retrofit2.http.Query
 
 class ApiHandler {
 
@@ -44,23 +39,32 @@ class ApiHandler {
         })
     }
 
-    fun searchTitles(s: String, callback: (Boolean, String?, List<SearchedTitle>?) -> Unit) {
+    fun searchTitles(s: String, callback: (Boolean, String, List<SearchedTitle>?) -> Unit) {
         RetrofitClient.omdbApiService.searchTitles(BuildConfig.OMDB_API_KEY, s)
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
-                    val Search: List<SearchedTitle>? = Gson().fromJson(
-                        response.body()?.getAsJsonArray("Search"),
-                        object : TypeToken<List<SearchedTitle>>() {}.type
-                    )
+                    when (val apiResponse = ResponseParser.parseResponse(response)) {
+                        is ApiResponse.Success -> {
+                            val Search: List<SearchedTitle>? = Gson().fromJson(
+                                response.body()?.getAsJsonArray("Search"),
+                                object : TypeToken<List<SearchedTitle>>() {}.type
+                            )
+                            callback(true, response.message(), Search)
+                        }
 
-                    callback(true, response.message(), Search)
+                        is ApiResponse.Error -> {
+                            callback(false, apiResponse.errorMessage, null)
+                        }
+
+                        else -> {}
+                    }
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    callback(true, t.message, null)
+                    callback(false, t.message!!, null)
                 }
             })
     }

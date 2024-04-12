@@ -72,11 +72,9 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private fun handleSearchEvent(s: String) {
         try {
             ApiHandler().searchTitles(s) { success, message, data ->
-                if (success) {
-                    if (data != null) {
-                        searchedTitles = data as MutableList<SearchedTitle>
-                        rvSearchedTitlesSetup(searchedTitles)
-                    }
+                if (success && !data.isNullOrEmpty()) {
+                    searchedTitles = data as MutableList<SearchedTitle>
+                    rvSearchedTitlesSetup(searchedTitles)
                 } else {
                     Toast.makeText(baseContext, message, Toast.LENGTH_SHORT).show()
                 }

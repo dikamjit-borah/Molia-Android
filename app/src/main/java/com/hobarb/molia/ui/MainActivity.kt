@@ -1,4 +1,4 @@
-package com.hobarb.molio.ui
+package com.hobarb.molia.ui
 
 import TitleDetails
 import android.content.Intent
@@ -11,9 +11,9 @@ import androidx.navigation.ui.navigateUp
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hobarb.molio.R
-import com.hobarb.molio.adapters.TitlesAdapter
-import com.hobarb.molio.databinding.ActivityMainBinding
+import com.hobarb.molia.R
+import com.hobarb.molia.adapters.TitlesAdapter
+import com.hobarb.molia.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

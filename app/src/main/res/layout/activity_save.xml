@@ -1,103 +1,392 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.SaveActivity"
-    android:padding="26dp">
+    tools:context=".ui.SaveActivity">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvLoaderLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"></ProgressBar>
+    </androidx.cardview.widget.CardView>
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/lexend"
-            android:text="Submit Movie Details"
-            android:textColor="#E4E5E8"
-            android:textSize="18sp"
-            android:textStyle="bold">
-
-        </TextView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/lexend"
-            android:text="Search for your movie and click continue"
-            android:textColor="#E4E5E8"
-            android:textSize="16sp">
-
-        </TextView>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_above="@id/btnSubmit"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/parentMargin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/lexend"
-                android:text="Title">
 
-            </TextView>
-
-            <SearchView
-                android:id="@+id/sv_titles"
+            <!-- todo: collapsible-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableTint="@android:color/white"
-                android:hint="Start Typing"
-                />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_searchedTitles"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Save "
+                        android:textSize="@dimen/h1"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Title"
+                        android:textSize="@dimen/h1"
+                        android:textStyle="bold">
+
+                    </TextView>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:maxLines="2"
+                    android:text="Search and add details for your favorite movies and tv shows"
+                    android:textSize="@dimen/h2">
+
+                </TextView>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginKeys"
+                    android:text="Title">
+
+                </TextView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/svTitle"
+                        style="@style/SearchViewStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        android:backgroundTint="@color/primaryAccent"
+                        android:drawableTint="@android:color/white"
+                        android:hint="Start Typing"
+                        app:closeIcon="@null" />
+
+                    <ProgressBar
+                        android:id="@+id/pbLoaderSmall"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:visibility="invisible" />
+
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_searchedTitles"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginKeys"
+                    android:text="Director">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/etDirector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary"
+                    android:backgroundTint="@color/primaryAccent"
+                    android:drawableTint="@android:color/white"
+                    android:hint="Start Typing"
+                    android:padding="@dimen/etPadding">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginKeys"
+                    android:text="Actors">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/etActors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary"
+                    android:backgroundTint="@color/primaryAccent"
+                    android:drawableTint="@android:color/white"
+                    android:hint="Start Typing"
+                    android:padding="@dimen/etPadding">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/marginKeys"
+                        android:text="Year">
+
+                    </TextView>
+
+                    <EditText
+                        android:id="@+id/etYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        android:backgroundTint="@color/primaryAccent"
+                        android:drawableTint="@android:color/white"
+                        android:hint="Start Typing"
+                        android:padding="@dimen/etPadding">
+
+                    </EditText>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/marginKeys"
+                        android:text="Language">
+
+                    </TextView>
+
+                    <EditText
+                        android:id="@+id/etLanguage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        android:backgroundTint="@color/primaryAccent"
+                        android:drawableTint="@android:color/white"
+                        android:hint="Start Typing"
+                        android:padding="@dimen/etPadding">
+
+                    </EditText>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginKeys"
+                    android:text="Imdb Ratings">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/etImdbRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary"
+                    android:backgroundTint="@color/primaryAccent"
+                    android:drawableTint="@android:color/white"
+                    android:hint="Start Typing"
+                    android:padding="@dimen/etPadding">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginKeys"
+                    android:text="My Ratings">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/etMyRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary"
+                    android:backgroundTint="@color/primaryAccent"
+                    android:drawableTint="@android:color/white"
+                    android:hint="Start Typing"
+                    android:padding="@dimen/etPadding">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/marginKeys"
+                        android:text="Collection">
+
+                    </TextView>
+
+                    <EditText
+                        android:id="@+id/etCollection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        android:backgroundTint="@color/primaryAccent"
+                        android:drawableTint="@android:color/white"
+                        android:hint="Start Typing"
+                        android:padding="@dimen/etPadding">
+
+                    </EditText>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/marginKeys"
+                        android:text="Sub Collection">
+
+                    </TextView>
+
+                    <EditText
+                        android:id="@+id/etSubCollection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        android:backgroundTint="@color/primaryAccent"
+                        android:drawableTint="@android:color/white"
+                        android:hint="Start Typing"
+                        android:padding="@dimen/etPadding">
+
+                    </EditText>
+
+                </LinearLayout>
+            </LinearLayout>
+
 
         </LinearLayout>
+    </ScrollView>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></EditText>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/parentMargin"
+        android:backgroundTint="@color/secondary"
+        android:padding="20dp"
+        android:text="Save Details"
+        android:textSize="@dimen/h2"
+        app:cornerRadius="@dimen/cornerRadius">
 
-        <EditText
-            android:id="@+id/et_collection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></EditText>
-
-        <EditText
-            android:id="@+id/et_sub_collection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></EditText>
-
-        <EditText
-            android:id="@+id/et_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></EditText>
-
-        <Button
-            android:id="@+id/btn_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit">
-
-        </Button>
-
-    </LinearLayout>
-
-</LinearLayout>
+    </com.google.android.material.button.MaterialButton>
+</RelativeLayout>

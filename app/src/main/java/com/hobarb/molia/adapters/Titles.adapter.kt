@@ -1,4 +1,4 @@
-package com.hobarb.molio.adapters
+package com.hobarb.molia.adapters
 
 import TitleDetails
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.hobarb.molio.R
+import com.hobarb.molia.R
 
 
 class TitlesAdapter(
@@ -15,14 +15,14 @@ class TitlesAdapter(
 
 
     inner class TitlesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title_tv: TextView = itemView.findViewById(R.id.title_tv);
+        val title_tv: TextView = itemView.findViewById(R.id.tvTitle);
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitlesViewHolder {
         return TitlesViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.card_title,
+                R.layout.card_searched_title,
                 parent,
                 false
             )

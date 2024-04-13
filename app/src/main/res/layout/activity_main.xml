@@ -18,7 +18,7 @@
         android:textSize="42sp"
         android:textColor="#FFFBF2"
         android:fontFamily="@font/big_shoulders_text_semibold"
-        android:text="Welcome to Molio Movie Search">
+        android:text="Welcome to Molia Movie Search">
 
     </TextView>
 

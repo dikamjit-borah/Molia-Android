@@ -1,4 +1,4 @@
-package com.hobarb.molio.utils
+package com.hobarb.molia.utils
 
 class Helpers {
     fun showLoader() {

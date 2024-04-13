@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Molio"
+rootProject.name = "Molia"
 include(":app")

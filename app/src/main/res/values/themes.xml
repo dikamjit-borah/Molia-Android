@@ -1,9 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Molio" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Molia" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="backgroundColor">@color/primary</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="android:windowBackground">@color/primary</item>
+        <item name="android:textColor">@color/tertiary</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
+        <item name="fontFamily">@font/lexend</item>
     </style>
 
-    <style name="Theme.Molio" parent="Base.Theme.Molio" />
+    <style name="Theme.Molia" parent="Base.Theme.Molia" >
+        <item name="backgroundColor">@color/primary</item>
+        <item name="colorPrimary">@color/primary</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:fontFamily">@font/lexend</item>
+    </style>
 </resources>

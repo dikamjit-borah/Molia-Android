@@ -1,4 +1,4 @@
-package com.hobarb.molio.models.dtos
+package com.hobarb.molia.models.dtos
 
 import TitleDetails
 import java.io.Serializable

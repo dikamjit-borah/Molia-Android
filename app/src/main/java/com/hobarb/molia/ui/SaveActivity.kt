@@ -202,19 +202,17 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private fun submitDetails(
         titleDetails: TitleDetails, collection: String, subCollection: String? = null
     ) {
-        var body: SaveTitleModel
-        if (subCollection.isNullOrEmpty()) {
-            body = SaveTitleModel(
+        val body: SaveTitleModel = if (subCollection.isNullOrEmpty()) {
+            SaveTitleModel(
                 user_id = Constants.USER_ID, collection = collection, details = titleDetails
             )
         } else {
-            body = SaveTitleModel(
+            SaveTitleModel(
                 user_id = Constants.USER_ID,
                 collection = collection,
                 sub_collection = subCollection,
                 details = titleDetails
             )
-
         }
 
         ApiHandler().saveTitle(body = body, loadingCallback = { isLoading ->

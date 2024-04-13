@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface MoliaBackendService {
     @POST("/v1/save")
-    fun saveTitle(@Body body: SaveTitleModel): Call<Unit>
+    fun saveTitle(@Body body: SaveTitleModel): Call<JsonObject>
 }
 
 interface OmdbApiService {

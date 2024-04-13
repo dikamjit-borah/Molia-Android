@@ -2,10 +2,12 @@ package com.hobarb.molia.ui
 
 import TitleDetails
 import android.os.Bundle
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.hobarb.molia.R
 import com.hobarb.molia.adapters.SearchedTitlesAdapter
 import com.hobarb.molia.databinding.ActivitySaveBinding
@@ -33,6 +35,9 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
         setContentView(R.layout.activity_save)
         binding = ActivitySaveBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Glide.with(this)
+            .load(R.drawable.gif_loader_small)
+            .into(binding.ivSearchLoader)
         setupViews()
     }
 
@@ -71,14 +76,21 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
 
     private fun handleSearchEvent(s: String) {
         try {
-            ApiHandler().searchTitles(s) { success, message, data ->
+            ApiHandler().searchTitles(s, loadingCallback = { isLoading ->
+                // Show/hide loader based on isLoading flag
+                if (isLoading) {
+                    showLoader()
+                } else {
+                    hideLoader()
+                }
+            }, { success, message, data ->
                 if (success && !data.isNullOrEmpty()) {
                     searchedTitles = data as MutableList<SearchedTitle>
                     rvSearchedTitlesSetup(searchedTitles)
                 } else {
                     Toast.makeText(baseContext, message, Toast.LENGTH_SHORT).show()
                 }
-            }
+            })
         } catch (exception: java.lang.Exception) {
             Toast.makeText(baseContext, exception.message, Toast.LENGTH_SHORT).show()
         }
@@ -189,5 +201,11 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
         }
     }
 
+    fun showLoader() {
+        binding.ivSearchLoader.visibility = View.VISIBLE
+    }
 
+    fun hideLoader() {
+        binding.ivSearchLoader.visibility = View.INVISIBLE
+    }
 }

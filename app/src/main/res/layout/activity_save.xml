@@ -82,16 +82,30 @@
 
                 </TextView>
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/svTitle"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/primary"
-                    android:backgroundTint="@color/primaryAccent"
-                    android:drawableTint="@android:color/white"
-                    android:hint="Start Typing"
-                    style="@style/SearchViewStyle"
-                    />
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/svTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        android:backgroundTint="@color/primaryAccent"
+                        android:drawableTint="@android:color/white"
+                        android:hint="Start Typing"
+                        style="@style/SearchViewStyle"
+                        app:closeIcon="@null"
+                        />
+                    <ImageView
+                        android:id="@+id/ivSearchLoader"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:visibility="invisible">
+                    </ImageView>
+                </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_searchedTitles"
@@ -370,5 +384,4 @@
         app:cornerRadius="@dimen/cornerRadius">
 
     </com.google.android.material.button.MaterialButton>
-
 </RelativeLayout>

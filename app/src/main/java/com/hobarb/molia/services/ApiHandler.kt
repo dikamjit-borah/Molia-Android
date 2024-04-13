@@ -39,13 +39,15 @@ class ApiHandler {
         })
     }
 
-    fun searchTitles(s: String, callback: (Boolean, String, List<SearchedTitle>?) -> Unit) {
+    fun searchTitles(s: String, loadingCallback: (Boolean) -> Unit, callback: (Boolean, String, List<SearchedTitle>?) -> Unit) {
+        loadingCallback(true)
         RetrofitClient.omdbApiService.searchTitles(BuildConfig.OMDB_API_KEY, s)
             .enqueue(object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
+                    loadingCallback(false)
                     when (val apiResponse = ResponseParser.parseResponse(response)) {
                         is ApiResponse.Success -> {
                             val Search: List<SearchedTitle>? = Gson().fromJson(
@@ -64,6 +66,7 @@ class ApiHandler {
                 }
 
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                    loadingCallback(false)
                     callback(false, t.message!!, null)
                 }
             })

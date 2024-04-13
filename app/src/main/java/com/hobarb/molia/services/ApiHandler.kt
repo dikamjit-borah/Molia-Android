@@ -14,32 +14,41 @@ import retrofit2.Response
 
 class ApiHandler {
 
-    fun saveTitle(body: SaveTitleModel, callback: (Boolean, String, Unit?) -> Unit) {
-        RetrofitClient.moliaApiService.saveTitle(body).enqueue(object : Callback<Unit> {
-            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+    fun saveTitle(
+        body: SaveTitleModel,
+        loadingCallback: (Boolean) -> Unit,
+        callback: (Boolean, String, String?) -> Unit
+    ) {
+        loadingCallback(true)
+        RetrofitClient.moliaApiService.saveTitle(body).enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                loadingCallback(false)
                 when (val apiResponse = ResponseParser.parseResponse(response)) {
                     is ApiResponse.Success -> {
-                        callback(true, "Success", apiResponse.data)
+                        val message = response.body()?.get("message")?.asString
+                        callback(true, response.message(), message)
                     }
 
                     is ApiResponse.Error -> {
                         callback(false, apiResponse.errorMessage, null)
                     }
 
-                    else -> {
-                        callback(false, "Some error", null)
-                    }
+                    else -> {}
                 }
             }
 
-            override fun onFailure(call: Call<Unit>, t: Throwable) {
-                // Handle network errors
-                callback(false, "Error: ${t.message}", null)
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                loadingCallback(false)
+                callback(false, t.message!!, null)
             }
         })
     }
 
-    fun searchTitles(s: String, loadingCallback: (Boolean) -> Unit, callback: (Boolean, String, List<SearchedTitle>?) -> Unit) {
+    fun searchTitles(
+        s: String,
+        loadingCallback: (Boolean) -> Unit,
+        callback: (Boolean, String, List<SearchedTitle>?) -> Unit
+    ) {
         loadingCallback(true)
         RetrofitClient.omdbApiService.searchTitles(BuildConfig.OMDB_API_KEY, s)
             .enqueue(object : Callback<JsonObject> {
@@ -72,17 +81,20 @@ class ApiHandler {
             })
     }
 
-    fun fetchTitleDetails(i: String, callback: (Boolean, String?, TitleDetails?) -> Unit) {
+    fun fetchTitleDetails(i: String, loadingCallback: (Boolean) -> Unit, callback: (Boolean, String?, TitleDetails?) -> Unit) {
+        loadingCallback(true)
         RetrofitClient.omdbApiService.fetchTitleDetails(BuildConfig.OMDB_API_KEY, i)
             .enqueue(object : Callback<TitleDetails> {
                 override fun onResponse(
                     call: Call<TitleDetails>,
                     response: Response<TitleDetails>
                 ) {
+                    loadingCallback(false)
                     callback(true, response.message(), response.body())
                 }
 
                 override fun onFailure(call: Call<TitleDetails>, t: Throwable) {
+                    loadingCallback(false)
                     callback(true, t.message, null)
                 }
             })

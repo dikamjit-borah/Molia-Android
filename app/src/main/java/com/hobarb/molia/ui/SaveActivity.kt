@@ -3,11 +3,13 @@ package com.hobarb.molia.ui
 import TitleDetails
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.hobarb.molia.R
 import com.hobarb.molia.adapters.SearchedTitlesAdapter
 import com.hobarb.molia.databinding.ActivitySaveBinding
@@ -22,12 +24,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private lateinit var binding: ActivitySaveBinding
     private var searchedTitles: MutableList<SearchedTitle> = mutableListOf()
     private var titleDetails: TitleDetails = TitleDetails()
     private var searchJob: Job? = null
     private var shouldExecuteQueryTextChange = true
+    private lateinit var loaderLarge: CardView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +39,11 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
         setContentView(R.layout.activity_save)
         binding = ActivitySaveBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Glide.with(this)
-            .load(R.drawable.gif_loader_small)
-            .into(binding.ivSearchLoader)
         setupViews()
     }
 
     private fun setupViews() {
+        loaderLarge = findViewById(R.id.cvLoaderLarge)
         svTitleSetup()
         btnSubmitSetup()
     }
@@ -77,22 +79,21 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private fun handleSearchEvent(s: String) {
         try {
             ApiHandler().searchTitles(s, loadingCallback = { isLoading ->
-                // Show/hide loader based on isLoading flag
                 if (isLoading) {
-                    showLoader()
+                    showLoaderSmall(binding.pbLoaderSmall)
                 } else {
-                    hideLoader()
+                    hideLoaderSmall(binding.pbLoaderSmall)
                 }
             }, { success, message, data ->
                 if (success && !data.isNullOrEmpty()) {
                     searchedTitles = data as MutableList<SearchedTitle>
                     rvSearchedTitlesSetup(searchedTitles)
                 } else {
-                    Toast.makeText(baseContext, message, Toast.LENGTH_SHORT).show()
+                    clearSearchedTitles()
                 }
             })
-        } catch (exception: java.lang.Exception) {
-            Toast.makeText(baseContext, exception.message, Toast.LENGTH_SHORT).show()
+        } catch (ex: Exception) {
+            Toast.makeText(baseContext, ex.message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -112,7 +113,13 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     }
 
     private fun fetchTitleDetails(title: SearchedTitle) {
-        ApiHandler().fetchTitleDetails(title.imdbID) { success, message, data ->
+        ApiHandler().fetchTitleDetails(title.imdbID, loadingCallback = { isLoading ->
+            if (isLoading) {
+                showLoaderSmall(binding.pbLoaderSmall)
+            } else {
+                hideLoaderSmall(binding.pbLoaderSmall)
+            }
+        }, { success, message, data ->
             if (success) {
                 if (data != null) {
                     handleTitleFetchedEvent(data)
@@ -120,7 +127,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
             } else {
                 Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
             }
-        }
+        })
     }
 
     fun handleTitleFetchedEvent(titleDetails: TitleDetails) {
@@ -143,16 +150,43 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private fun btnSubmitSetup() {
         binding.btnSubmit.setOnClickListener {
             try {
-                val details = getTitleDetails()
-                submitDetails(
-                    details,
-                    binding.etCollection.text.toString(),
-                    binding.etSubCollection.text.toString()
-                )
+                if (!validateInputs()) Toast.makeText(
+                    baseContext, "Some fields are not added", Toast.LENGTH_SHORT
+                ).show()
+                else {
+                    val details = getTitleDetails()
+                    submitDetails(
+                        details,
+                        binding.etCollection.text.toString(),
+                        binding.etSubCollection.text.toString()
+                    )
+                }
+
             } catch (ex: Exception) {
                 Toast.makeText(baseContext, ex.message, Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun validateInputs(): Boolean {
+        val editTexts = listOf(
+            binding.etDirector,
+            binding.etActors,
+            binding.etYear,
+            binding.etLanguage,
+            binding.etCollection
+        )
+
+        var isValid = true
+
+        editTexts.forEach { editText ->
+            if (editText.text.isNullOrEmpty()) {
+                editText.error = Constants.MESSAGE.INPUT_NOT_BE_EMPTY
+                isValid = false
+            }
+        }
+
+        return isValid
     }
 
     private fun getTitleDetails(): TitleDetails {
@@ -166,16 +200,12 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     }
 
     private fun submitDetails(
-        titleDetails: TitleDetails,
-        collection: String,
-        subCollection: String? = null
+        titleDetails: TitleDetails, collection: String, subCollection: String? = null
     ) {
         var body: SaveTitleModel
         if (subCollection.isNullOrEmpty()) {
             body = SaveTitleModel(
-                user_id = Constants.USER_ID,
-                collection = collection,
-                details = titleDetails
+                user_id = Constants.USER_ID, collection = collection, details = titleDetails
             )
         } else {
             body = SaveTitleModel(
@@ -187,10 +217,13 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
 
         }
 
-        ApiHandler().saveTitle(
-            body = body
-        ) { success, message, data ->
-            //hideLoader() // Hide loader after API call is completed
+        ApiHandler().saveTitle(body = body, loadingCallback = { isLoading ->
+            if (isLoading) {
+                showLoaderLarge()
+            } else {
+                hideLoaderLarge()
+            }
+        }, { success, message, data ->
             if (success) {
                 Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
                 // Proceed to next step
@@ -198,14 +231,27 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
                 Toast.makeText(baseContext, message + data, Toast.LENGTH_SHORT).show()
                 // Handle failure case
             }
-        }
+        })
     }
 
-    fun showLoader() {
-        binding.ivSearchLoader.visibility = View.VISIBLE
+    fun showLoaderSmall(loader: ProgressBar) {
+        loader.visibility = View.VISIBLE
     }
 
-    fun hideLoader() {
-        binding.ivSearchLoader.visibility = View.INVISIBLE
+    fun hideLoaderSmall(loader: ProgressBar) {
+        loader.visibility = View.INVISIBLE
+    }
+
+    private fun showLoaderLarge() {
+        loaderLarge.visibility = View.VISIBLE
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+    }
+
+    private fun hideLoaderLarge() {
+        loaderLarge.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 }

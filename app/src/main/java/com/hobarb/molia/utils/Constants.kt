@@ -14,6 +14,7 @@ object Constants {
         const val PARSE_ERROR = "Error parsing response data"
         const val SOMETHING_WRONG = "Something went wrong. Please try after some time"
         const val NO_RESPONSE = "Response does not contain data"
+        const val INPUT_NOT_BE_EMPTY = "Input field cannot be empty"
         //const val NO_RESPONSE = "Response does not contain data"
     }
 

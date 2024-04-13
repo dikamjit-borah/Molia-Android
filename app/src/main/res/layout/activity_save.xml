@@ -8,11 +8,25 @@
     android:orientation="vertical"
     tools:context=".ui.SaveActivity">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvLoaderLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"></ProgressBar>
+    </androidx.cardview.widget.CardView>
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_above="@id/btnSubmit"
+        android:layout_alignParentTop="true"
         android:layout_margin="@dimen/parentMargin">
 
         <LinearLayout
@@ -31,6 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -47,8 +62,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="Title"
                         android:textSize="@dimen/h1"
-                        android:textStyle="bold"
-                        android:textColor="@color/secondaryAccent">
+                        android:textStyle="bold">
 
                     </TextView>
                 </LinearLayout>
@@ -77,41 +91,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/marginKeys"
-                    android:text="Title"
-                    android:textColor="@color/tertiaryAccent">
+                    android:text="Title">
 
                 </TextView>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <androidx.appcompat.widget.SearchView
                         android:id="@+id/svTitle"
+                        style="@style/SearchViewStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/primary"
                         android:backgroundTint="@color/primaryAccent"
                         android:drawableTint="@android:color/white"
                         android:hint="Start Typing"
-                        style="@style/SearchViewStyle"
-                        app:closeIcon="@null"
-                        />
-                    <ImageView
-                        android:id="@+id/ivSearchLoader"
+                        app:closeIcon="@null" />
+
+                    <ProgressBar
+                        android:id="@+id/pbLoaderSmall"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
-                        android:visibility="invisible">
-                    </ImageView>
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:visibility="invisible" />
+
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_searchedTitles"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
+                    android:layout_height="match_parent">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -127,8 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/marginKeys"
-                    android:text="Director"
-                    android:textColor="@color/tertiaryAccent">
+                    android:text="Director">
 
                 </TextView>
 
@@ -156,8 +168,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/marginKeys"
-                    android:text="Actors"
-                    android:textColor="@color/tertiaryAccent">
+                    android:text="Actors">
 
                 </TextView>
 
@@ -192,8 +203,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/marginKeys"
-                        android:text="Year"
-                        android:textColor="@color/tertiaryAccent">
+                        android:text="Year">
 
                     </TextView>
 
@@ -222,8 +232,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/marginKeys"
-                        android:text="Language"
-                        android:textColor="@color/tertiaryAccent">
+                        android:text="Language">
 
                     </TextView>
 
@@ -252,8 +261,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/marginKeys"
-                    android:text="Imdb Ratings"
-                    android:textColor="@color/tertiaryAccent">
+                    android:text="Imdb Ratings">
 
                 </TextView>
 
@@ -281,8 +289,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/marginKeys"
-                    android:text="My Ratings"
-                    android:textColor="@color/tertiaryAccent">
+                    android:text="My Ratings">
 
                 </TextView>
 
@@ -317,8 +324,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/marginKeys"
-                        android:text="Collection"
-                        android:textColor="@color/tertiaryAccent">
+                        android:text="Collection">
 
                     </TextView>
 
@@ -347,8 +353,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/marginKeys"
-                        android:text="Sub Collection"
-                        android:textColor="@color/tertiaryAccent">
+                        android:text="Sub Collection">
 
                     </TextView>
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/primaryAccent"/>
+                    <padding android:left="@dimen/etPadding" />
+                </shape>
+            </item>
+            <item android:gravity="end|center_vertical" android:drawable="@drawable/ic_dropdown"/>
+        </layer-list>
+    </item>
+</selector>

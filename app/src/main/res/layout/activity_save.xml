@@ -328,17 +328,17 @@
 
                     </TextView>
 
-                    <EditText
-                        android:id="@+id/etCollection"
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spCollection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/primary"
-                        android:backgroundTint="@color/primaryAccent"
+                        android:background="@drawable/bg_spinner"
+                        android:clickable="true"
                         android:drawableTint="@android:color/white"
-                        android:hint="Start Typing"
-                        android:padding="@dimen/etPadding">
-
-                    </EditText>
+                        android:focusable="true"
+                        android:padding="15.5dp"
+                        android:spinnerMode="dropdown" />
 
                 </LinearLayout>
 

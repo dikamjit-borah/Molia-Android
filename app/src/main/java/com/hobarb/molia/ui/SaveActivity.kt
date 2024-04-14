@@ -4,6 +4,8 @@ import TitleDetails
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
@@ -25,7 +27,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
+class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
+    AdapterView.OnItemSelectedListener {
     private lateinit var binding: ActivitySaveBinding
     private var searchedTitles: MutableList<SearchedTitle> = mutableListOf()
     private var titleDetails: TitleDetails = TitleDetails()
@@ -45,6 +48,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private fun setupViews() {
         loaderLarge = findViewById(R.id.cvLoaderLarge)
         svTitleSetup()
+        spCollectionSetup()
         btnSubmitSetup()
     }
 
@@ -147,21 +151,38 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
         shouldExecuteQueryTextChange = true
     }
 
+    fun spCollectionSetup() {
+        val adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, Constants.COLLECTIONS
+        )
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spCollection.adapter = adapter
+        binding.spCollection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                binding.spCollection.setSelection(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+
+            }
+        }
+    }
+
     private fun btnSubmitSetup() {
         binding.btnSubmit.setOnClickListener {
             try {
-                if (!validateInputs()) Toast.makeText(
-                    baseContext, "Some fields are not added", Toast.LENGTH_SHORT
-                ).show()
-                else {
+                if (validateInputs()) {
                     val details = getTitleDetails()
                     submitDetails(
                         details,
-                        binding.etCollection.text.toString(),
+                        binding.spCollection.selectedItem.toString(),
                         binding.etSubCollection.text.toString()
                     )
                 }
-
             } catch (ex: Exception) {
                 Toast.makeText(baseContext, ex.message, Toast.LENGTH_LONG).show()
             }
@@ -174,7 +195,6 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
             binding.etActors,
             binding.etYear,
             binding.etLanguage,
-            binding.etCollection
         )
 
         var isValid = true
@@ -251,5 +271,13 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle> {
     private fun hideLoaderLarge() {
         loaderLarge.visibility = View.GONE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }

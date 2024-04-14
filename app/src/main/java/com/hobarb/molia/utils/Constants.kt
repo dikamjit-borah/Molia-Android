@@ -1,13 +1,8 @@
 package com.hobarb.molia.utils
 
 object Constants {
-    object COLLECTION {
-        const val WATCHED = "watched"
-        const val WATCHING = "watching"
-        const val FAVORITES = "favorites"
-        const val WISHLIST = "wishlist"
-        const val CUSTOM = "custom"
-    }
+
+    val COLLECTIONS = arrayOf("watched", "watching", "favorites", "wishlist", "custom")
 
     object MESSAGE {
         const val NETWORK_ERROR = "Some network error occurred while fetching data"

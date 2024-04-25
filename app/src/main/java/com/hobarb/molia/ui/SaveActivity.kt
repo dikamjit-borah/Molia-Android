@@ -12,8 +12,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.hobarb.molia.R
 import com.hobarb.molia.adapters.SearchedTitlesAdapter
+import com.hobarb.molia.adapters.SubCollectionsAdapter
 import com.hobarb.molia.databinding.ActivitySaveBinding
 import com.hobarb.molia.interfaces.OnItemClickListener
 import com.hobarb.molia.models.dtos.SaveTitleModel
@@ -27,15 +30,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
+class SaveActivity : AppCompatActivity(), OnItemClickListener,
     AdapterView.OnItemSelectedListener {
     private lateinit var binding: ActivitySaveBinding
     private var searchedTitles: MutableList<SearchedTitle> = mutableListOf()
+    private lateinit var subCollections: JsonArray
     private var titleDetails: TitleDetails = TitleDetails()
-    private var searchJob: Job? = null
+    private var searchTitleJob: Job? = null
     private var shouldExecuteQueryTextChange = true
     private lateinit var loaderLarge: CardView
-
+    private lateinit var subCollectionsAdapter: SubCollectionsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +52,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
     private fun setupViews() {
         loaderLarge = findViewById(R.id.cvLoaderLarge)
         svTitleSetup()
+        svSubCollectionSetup()
         spCollectionSetup()
         btnSubmitSetup()
     }
@@ -63,8 +68,8 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
                 if (shouldExecuteQueryTextChange) {
                     if (newText?.length!! > 0) {
                         newText.let { text ->
-                            searchJob?.cancel() // Cancel the previous search job if any
-                            searchJob = CoroutineScope(Dispatchers.Main).launch {
+                            searchTitleJob?.cancel() // Cancel the previous search job if any
+                            searchTitleJob = CoroutineScope(Dispatchers.Main).launch {
                                 delay(300) // Debounce time in milliseconds
                                 handleSearchEvent(text)
                             }
@@ -80,13 +85,28 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
         })
     }
 
+    private fun svSubCollectionSetup() {
+        binding.svSubCollection.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                subCollectionsAdapter.filter.filter(query)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                subCollectionsAdapter.filter.filter(newText);
+                return false;
+            }
+        })
+    }
+
     private fun handleSearchEvent(s: String) {
         try {
             ApiHandler().searchTitles(s, loadingCallback = { isLoading ->
                 if (isLoading) {
-                    showLoaderSmall(binding.pbLoaderSmall)
+                    showLoaderSmall(binding.pbLoaderSmall1)
                 } else {
-                    hideLoaderSmall(binding.pbLoaderSmall)
+                    hideLoaderSmall(binding.pbLoaderSmall1)
                 }
             }, { success, message, data ->
                 if (success && !data.isNullOrEmpty()) {
@@ -106,11 +126,6 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
         binding.rvSearchedTitles.adapter = SearchedTitlesAdapter(this, this, titles)
     }
 
-    override fun onItemClick(item: SearchedTitle) {
-        clearSearchedTitles()
-        fetchTitleDetails(item)
-    }
-
     private fun clearSearchedTitles() {
         searchedTitles.clear()
         binding.rvSearchedTitles.adapter?.notifyDataSetChanged()
@@ -119,9 +134,9 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
     private fun fetchTitleDetails(title: SearchedTitle) {
         ApiHandler().fetchTitleDetails(title.imdbID, loadingCallback = { isLoading ->
             if (isLoading) {
-                showLoaderSmall(binding.pbLoaderSmall)
+                showLoaderSmall(binding.pbLoaderSmall1)
             } else {
-                hideLoaderSmall(binding.pbLoaderSmall)
+                hideLoaderSmall(binding.pbLoaderSmall1)
             }
         }, { success, message, data ->
             if (success) {
@@ -162,6 +177,9 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
+                if (position == 4) {
+                    fetchSubCollections()
+                }
                 binding.spCollection.setSelection(position)
             }
 
@@ -172,6 +190,29 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
         }
     }
 
+    fun fetchSubCollections() {
+        ApiHandler().fetchSubCollections(Constants.USER_ID, loadingCallback = { isLoading ->
+            if (isLoading) {
+                showLoaderSmall(binding.pbLoaderSmall2)
+            } else {
+                hideLoaderSmall(binding.pbLoaderSmall2)
+            }
+        }, { success, message, data ->
+            if (success && data != null && data.size() > 0) {
+                subCollections = data
+                rvSubCollectionsSetup(subCollections)
+            } else {
+                clearSearchedTitles()
+            }
+        })
+    }
+
+    fun rvSubCollectionsSetup(subCollectionList: JsonArray) {
+        binding.rvSubCollections.layoutManager = LinearLayoutManager(this)
+        subCollectionsAdapter = SubCollectionsAdapter(this, subCollectionList = subCollectionList)
+        binding.rvSubCollections.adapter = subCollectionsAdapter
+    }
+
     private fun btnSubmitSetup() {
         binding.btnSubmit.setOnClickListener {
             try {
@@ -180,7 +221,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
                     submitDetails(
                         details,
                         binding.spCollection.selectedItem.toString(),
-                        binding.etSubCollection.text.toString()
+                        binding.svSubCollection.query.toString()
                     )
                 }
             } catch (ex: Exception) {
@@ -279,5 +320,20 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener<SearchedTitle>,
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
         TODO("Not yet implemented")
+    }
+
+    override fun onSearchedTitleItemClick(item: SearchedTitle) {
+        clearSearchedTitles()
+        fetchTitleDetails(item)
+    }
+
+    override fun onSubCollectionItemClick(item: JsonElement) {
+        clearSubCollectionList()
+        binding.svSubCollection.setQuery(item.asString, false)
+    }
+
+    private fun clearSubCollectionList() {
+        subCollections.removeAll { true }
+        binding.rvSubCollections.adapter?.notifyDataSetChanged()
     }
 }

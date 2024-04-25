@@ -1,5 +1,10 @@
 package com.hobarb.molia.interfaces
 
-interface OnItemClickListener<T> {
-    fun onItemClick(item: T)
+import com.google.gson.JsonElement
+import com.hobarb.molia.models.schemas.SearchedTitle
+
+interface OnItemClickListener {
+    fun onSearchedTitleItemClick(item: SearchedTitle)
+    fun onSubCollectionItemClick(item: JsonElement)
+
 }

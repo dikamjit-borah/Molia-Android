@@ -18,7 +18,7 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"></ProgressBar>
+            android:layout_gravity="center" />
     </androidx.cardview.widget.CardView>
 
 
@@ -111,7 +111,7 @@
                         app:closeIcon="@null" />
 
                     <ProgressBar
-                        android:id="@+id/pbLoaderSmall"
+                        android:id="@+id/pbLoaderSmall1"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentEnd="true"
@@ -328,17 +328,31 @@
 
                     </TextView>
 
-
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spCollection"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_spinner"
-                        android:clickable="true"
-                        android:drawableTint="@android:color/white"
-                        android:focusable="true"
-                        android:padding="15.5dp"
-                        android:spinnerMode="dropdown" />
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/spCollection"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_spinner"
+                            android:clickable="true"
+                            android:drawableTint="@android:color/white"
+                            android:focusable="true"
+                            android:padding="@dimen/etPadding"
+                            android:spinnerMode="dropdown" />
+
+                        <ProgressBar
+                            android:id="@+id/pbLoaderSmall2"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="26dp"
+                            android:visibility="invisible" />
+                    </RelativeLayout>
+
 
                 </LinearLayout>
 
@@ -357,17 +371,23 @@
 
                     </TextView>
 
-                    <EditText
-                        android:id="@+id/etSubCollection"
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/svSubCollection"
+                        style="@style/SearchViewStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/primary"
                         android:backgroundTint="@color/primaryAccent"
                         android:drawableTint="@android:color/white"
                         android:hint="Start Typing"
-                        android:padding="@dimen/etPadding">
+                        app:closeIcon="@null" />
 
-                    </EditText>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvSubCollections"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>
             </LinearLayout>

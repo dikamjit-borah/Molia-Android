@@ -14,11 +14,11 @@ import com.hobarb.molia.R
 import com.hobarb.molia.interfaces.OnItemClickListener
 
 
-class SearchedTitlesAdapter<T>(
+class SearchedTitlesAdapter(
     var context: Context,
-    private val listener: OnItemClickListener<T>,
+    private val listener: OnItemClickListener,
     private val titlesList: List<SearchedTitle>,
-) : RecyclerView.Adapter<SearchedTitlesAdapter<T>.TitlesViewHolder>() {
+) : RecyclerView.Adapter<SearchedTitlesAdapter.TitlesViewHolder>() {
 
 
     inner class TitlesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -57,7 +57,7 @@ class SearchedTitlesAdapter<T>(
             .into(holder.ivPoster);
 
         holder.llTitle.setOnClickListener {
-            listener.onItemClick(item as T)
+            listener.onSearchedTitleItemClick(item)
         }
     }
 }

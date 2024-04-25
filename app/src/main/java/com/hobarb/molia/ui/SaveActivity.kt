@@ -39,7 +39,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener,
     private var searchTitleJob: Job? = null
     private var shouldExecuteQueryTextChange = true
     private lateinit var loaderLarge: CardView
-
+    private lateinit var subCollectionsAdapter: SubCollectionsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,20 +89,13 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener,
         binding.svSubCollection.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                subCollectionsAdapter.filter.filter(query)
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (shouldExecuteQueryTextChange) {
-                    if (newText?.length!! > 0) {
-                        //handleSubCollectionSearchEvent(newText)
-
-                    } else {
-                        subCollections.removeAll { true }
-                        binding.rvSubCollections.adapter?.notifyDataSetChanged()
-                    }
-                }
-                return false
+                subCollectionsAdapter.filter.filter(newText);
+                return false;
             }
         })
     }
@@ -216,8 +209,8 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener,
 
     fun rvSubCollectionsSetup(subCollectionList: JsonArray) {
         binding.rvSubCollections.layoutManager = LinearLayoutManager(this)
-        binding.rvSubCollections.adapter =
-            SubCollectionsAdapter(this, subCollectionList = subCollectionList)
+        subCollectionsAdapter = SubCollectionsAdapter(this, subCollectionList = subCollectionList)
+        binding.rvSubCollections.adapter = subCollectionsAdapter
     }
 
     private fun btnSubmitSetup() {
@@ -228,7 +221,7 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener,
                     submitDetails(
                         details,
                         binding.spCollection.selectedItem.toString(),
-                        // binding.etSubCollection.text.toString()
+                        binding.svSubCollection.query.toString()
                     )
                 }
             } catch (ex: Exception) {
@@ -335,12 +328,8 @@ class SaveActivity : AppCompatActivity(), OnItemClickListener,
     }
 
     override fun onSubCollectionItemClick(item: JsonElement) {
-        handleSubCollectionClickEvent(item.asString)
-    }
-
-    fun handleSubCollectionClickEvent(subCollectionName: String) {
         clearSubCollectionList()
-        binding.svSubCollection.setQuery(subCollectionName, false)
+        binding.svSubCollection.setQuery(item.asString, false)
     }
 
     private fun clearSubCollectionList() {
